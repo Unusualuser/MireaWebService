@@ -39,19 +39,15 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public String testServicePutMethod(Request request) throws NoSuchRequest {
-        try {
+        if (!request.equals(new Request()) && requestRepository.existsById(request.getId())) {
             RequestDAO requestDAO = RequestMapper.REQUEST_MAPPER.requestToRequestDAO(request);
-            if (requestRepository.existsById(request.getId())) {
-                for (BookDao bookDao : requestDAO.getBookDaoList()) {
-                    bookDao.setRequestDao(requestDAO);
-                }
-                requestRepository.save(requestDAO);
+            for (BookDao bookDao : requestDAO.getBookDaoList()) {
+                bookDao.setRequestDao(requestDAO);
             }
+            requestRepository.save(requestDAO);
             return "Row was successfully updated!";
-        } catch (Exception e) {
-            throw new NoSuchRequest();
         }
-
+        throw new NoSuchRequest();
     }
 
     @Override

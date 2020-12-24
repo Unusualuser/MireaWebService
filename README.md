@@ -11,4 +11,4 @@
 
 ### Как связаться с разработчиком
 
-telegram: @Unusual_user
+telegram: https://teleg.run/Unusual__user
