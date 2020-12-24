@@ -23,7 +23,7 @@ public class MireaController {
     }
 
     @ApiOperation(value = "Пост метод тестового веб-сервиса",
-            notes = "Отправление пост-метода")
+            notes = "Отправление пост-метода для добавления новой книги, на вход принимается объект книги")
     @PostMapping("/post-method")
     public ResponseEntity<Response<String>> postMethod(@RequestBody RequestDto requestDto) {
         try {
@@ -36,7 +36,7 @@ public class MireaController {
     }
 
     @ApiOperation(value = "Гет метод тестового веб-сервиса",
-            notes = "Отправление гет-метода")
+            notes = "Отправление гет-метода для получения книги по id")
     @GetMapping("/get-method")
     public ResponseEntity<Response<RequestDto>> getMethod(@RequestParam Long id) {
         try {
@@ -49,7 +49,7 @@ public class MireaController {
     }
 
     @ApiOperation(value = "Пут метод тестового веб-сервиса",
-            notes = "Отправление пут-метода")
+            notes = "Отправление пут-метода для изменения параметров книги, на вход принимается объект книги")
     @PutMapping("/put-method")
     public ResponseEntity<Response<String>> putMethod(@RequestBody RequestDto requestDto) {
         try {
@@ -62,7 +62,7 @@ public class MireaController {
     }
 
     @ApiOperation(value = "Делит метод тестового веб-сервиса",
-            notes = "Отправление делит-метода")
+            notes = "Отправление делит-метода для удаления книги по id")
     @DeleteMapping("/delete-method")
     public ResponseEntity<Response<String>> deleteMethod(@RequestParam Long id) {
         try {
