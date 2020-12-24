@@ -31,7 +31,7 @@ class TestServiceImplTest {
     @DisplayName("Testing for NoSuchRequestException in put method")
     @Test
     void testServicePutMethodException() {
-        Assertions.assertThrows(NoSuchRequest.class, () -> testService.testServicePutMethod(new Request()));
+        Assertions.assertThrows(NoSuchRequest.class, () -> testService.testServicePutMethod(new Request(1539393L, "запрос", new ArrayList<>())));
     }
 
     @DisplayName("Testing for NoSuchIdException in delete method")

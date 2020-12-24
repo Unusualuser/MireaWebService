@@ -39,7 +39,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public String testServicePutMethod(Request request) throws NoSuchRequest {
-        if (!request.equals(new Request()) && requestRepository.existsById(request.getId())) {
+        if (requestRepository.existsById(request.getId())) {
             RequestDAO requestDAO = RequestMapper.REQUEST_MAPPER.requestToRequestDAO(request);
             for (BookDao bookDao : requestDAO.getBookDaoList()) {
                 bookDao.setRequestDao(requestDAO);
