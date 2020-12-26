@@ -1,9 +1,11 @@
 package ru.mirea.intro.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mirea.intro.dao.BookDao;
 import ru.mirea.intro.dao.RequestDAO;
+import ru.mirea.intro.dao.repository.BookRepository;
 import ru.mirea.intro.dao.repository.RequestRepository;
 import ru.mirea.intro.exception.NoSuchRequest;
 import ru.mirea.intro.mapper.RequestMapper;
@@ -17,35 +19,40 @@ import java.util.Optional;
 public class TestServiceImpl implements TestService {
     @Autowired
     RequestRepository requestRepository;
+    @Autowired
+    BookRepository bookRepository;
 
     @Override
     public Request testServiceGetMethod(Long id) throws NoSuchRequest {
         Optional<RequestDAO> requestDAO = requestRepository.findById(id);
         if (requestDAO.isPresent()) {
+            requestDAO.get().setBookDaoList(bookRepository.findByRequestDaoOrderByIdDesc(requestDAO.get()));
             return RequestMapper.REQUEST_MAPPER.requestDAOToRequest(requestDAO.get());
         }
         throw new NoSuchRequest();
     }
 
     @Override
-    public String testServicePostMethod(Request request) {
+    public Request testServicePostMethod(Request request) {
         RequestDAO requestDAO = RequestMapper.REQUEST_MAPPER.requestToRequestDAO(request);
         for (BookDao bookDao : requestDAO.getBookDaoList()) {
             bookDao.setRequestDao(requestDAO);
         }
-        requestRepository.save(requestDAO);
-        return "Successfully inserted row!";
+        RequestDAO outDao = requestRepository.save(requestDAO);
+        outDao.setBookDaoList(bookRepository.findByRequestDaoOrderByIdDesc(outDao));
+        return RequestMapper.REQUEST_MAPPER.requestDAOToRequest(outDao);
     }
 
     @Override
-    public String testServicePutMethod(Request request) throws NoSuchRequest {
+    public Request testServicePutMethod(Request request) throws NoSuchRequest {
         if (requestRepository.existsById(request.getId())) {
             RequestDAO requestDAO = RequestMapper.REQUEST_MAPPER.requestToRequestDAO(request);
             for (BookDao bookDao : requestDAO.getBookDaoList()) {
                 bookDao.setRequestDao(requestDAO);
             }
-            requestRepository.save(requestDAO);
-            return "Row was successfully updated!";
+            RequestDAO outDao = requestRepository.save(requestDAO);
+            outDao.setBookDaoList(bookRepository.findAll(Sort.by("id").descending()));
+            return RequestMapper.REQUEST_MAPPER.requestDAOToRequest(outDao);
         }
         throw new NoSuchRequest();
     }

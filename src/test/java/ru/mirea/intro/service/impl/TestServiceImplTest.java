@@ -45,9 +45,9 @@ class TestServiceImplTest {
     @Transactional
     void testServiceGetMethod() throws NoSuchRequest {
         List<Book> bookList = new ArrayList<>();
-        bookList.add(new Book(16L, "Толстой", "Война и Мир"));
-        Request request = new Request(199L, "Второй запрос", bookList);
-        Assertions.assertEquals(testService.testServiceGetMethod(199L), request);
+        bookList.add(new Book(1L, "Толстой", "Война и Мир"));
+        Request request = new Request(1L, "Первый запрос", bookList);
+        Assertions.assertEquals(testService.testServiceGetMethod(1L), request);
     }
 
     @DisplayName("Testing for normal post")
@@ -55,24 +55,24 @@ class TestServiceImplTest {
     @Transactional
     void testServicePostMethod() {
         List<Book> bookList = new ArrayList<>();
-        bookList.add(new Book(456L, "Толстой Тест", "Война и Мир Тест"));
-        Request request = new Request(123L, "Первый запрос из теста", bookList);
-        Assertions.assertEquals("Successfully inserted row!", testService.testServicePostMethod(request));
+        bookList.add(new Book(3L, "Пост", "метод"));
+        Request request = new Request(3L, "Пост запрос", bookList);
+        Assertions.assertEquals(request, testService.testServicePostMethod(request));
     }
 
     @DisplayName("Testing for normal put")
     @Test
     @Transactional
     void testServicePutMethod() throws NoSuchRequest {
-        Request putRequest = testService.testServiceGetMethod(104L);
+        Request putRequest = testService.testServiceGetMethod(1L);
         putRequest.setRequestValue("I know");
-        Assertions.assertEquals("Row was successfully updated!", testService.testServicePutMethod(putRequest));
+        Assertions.assertEquals(putRequest, testService.testServicePutMethod(putRequest));
     }
 
     @DisplayName("Testing for normal delete")
     @Test
     @Transactional
     void testServiceDeleteMethod() throws NoSuchRequest {
-        Assertions.assertEquals("Row was successfully deleted!", testService.testServiceDeleteMethod(199L));
+        Assertions.assertEquals("Row was successfully deleted!", testService.testServiceDeleteMethod(1L));
     }
 }

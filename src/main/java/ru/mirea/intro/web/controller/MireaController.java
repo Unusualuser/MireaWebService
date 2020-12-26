@@ -23,13 +23,20 @@ public class MireaController {
         this.testService = testService;
     }
 
+    @ApiOperation(value = "Проверка на работоспоснобность приложения",
+            notes = "Отправление запроса для проверки работоспособности")
+    @GetMapping("/isHealth-method")
+    public ResponseEntity<Response<Boolean>> isHealthMethod() {
+        return new ResponseEntity<>(new Response<>(new Meta(0, "All good!"), true), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Пост метод тестового веб-сервиса",
             notes = "Отправление пост-метода для добавления новой книги, на вход принимается объект книги")
     @PostMapping("/post-method")
-    public ResponseEntity<Response<String>> postMethod(@ApiParam(value = "Модель запроса requestDto", required = true) @RequestBody RequestDto requestDto) {
+    public ResponseEntity<Response<RequestDto>> postMethod(@ApiParam(value = "Модель запроса requestDto", required = true) @RequestBody RequestDto requestDto) {
         try {
             Request request = RequestMapper.REQUEST_MAPPER.requestDTOToRequest(requestDto);
-            String testServiceResponse = testService.testServicePostMethod(request);
+            RequestDto testServiceResponse = RequestMapper.REQUEST_MAPPER.requestToRequestDto(testService.testServicePostMethod(request));
             return new ResponseEntity<>(new Response<>(new Meta(0, "All good!"), testServiceResponse), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new Response<>(new Meta(1, e.toString()), null), HttpStatus.CONFLICT);
@@ -52,10 +59,10 @@ public class MireaController {
     @ApiOperation(value = "Пут метод тестового веб-сервиса",
             notes = "Отправление пут-метода для изменения параметров книги, на вход принимается объект книги")
     @PutMapping("/put-method")
-    public ResponseEntity<Response<String>> putMethod(@ApiParam(value = "Модель запроса requestDto", required = true) @RequestBody RequestDto requestDto) {
+    public ResponseEntity<Response<RequestDto>> putMethod(@ApiParam(value = "Модель запроса requestDto", required = true) @RequestBody RequestDto requestDto) {
         try {
             Request request = RequestMapper.REQUEST_MAPPER.requestDTOToRequest(requestDto);
-            String testServiceResponse = testService.testServicePutMethod(request);
+            RequestDto testServiceResponse = RequestMapper.REQUEST_MAPPER.requestToRequestDto(testService.testServicePutMethod(request));
             return new ResponseEntity<>(new Response<>(new Meta(0, "All good!"), testServiceResponse), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new Response<>(new Meta(1, e.toString()), null), HttpStatus.CONFLICT);
