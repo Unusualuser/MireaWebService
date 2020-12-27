@@ -33,6 +33,18 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Request testServicePostMethod(Request request) {
+        return getRequest(request);
+    }
+
+    @Override
+    public Request testServicePutMethod(Request request) throws NoSuchRequest {
+        if (requestRepository.existsById(request.getId())) {
+            return getRequest(request);
+        }
+        throw new NoSuchRequest();
+    }
+
+    private Request getRequest(Request request) {
         RequestDAO requestDAO = RequestMapper.REQUEST_MAPPER.requestToRequestDAO(request);
         for (BookDao bookDao : requestDAO.getBookDaoList()) {
             bookDao.setRequestDao(requestDAO);
@@ -40,20 +52,6 @@ public class TestServiceImpl implements TestService {
         RequestDAO outDao = requestRepository.save(requestDAO);
         outDao.setBookDaoList(bookRepository.findByRequestDaoOrderByIdDesc(outDao));
         return RequestMapper.REQUEST_MAPPER.requestDAOToRequest(outDao);
-    }
-
-    @Override
-    public Request testServicePutMethod(Request request) throws NoSuchRequest {
-        if (requestRepository.existsById(request.getId())) {
-            RequestDAO requestDAO = RequestMapper.REQUEST_MAPPER.requestToRequestDAO(request);
-            for (BookDao bookDao : requestDAO.getBookDaoList()) {
-                bookDao.setRequestDao(requestDAO);
-            }
-            RequestDAO outDao = requestRepository.save(requestDAO);
-            outDao.setBookDaoList(bookRepository.findByRequestDaoOrderByIdDesc(outDao));
-            return RequestMapper.REQUEST_MAPPER.requestDAOToRequest(outDao);
-        }
-        throw new NoSuchRequest();
     }
 
     @Override
