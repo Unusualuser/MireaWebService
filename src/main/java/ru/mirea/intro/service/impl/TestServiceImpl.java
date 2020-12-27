@@ -1,7 +1,6 @@
 package ru.mirea.intro.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mirea.intro.dao.BookDao;
 import ru.mirea.intro.dao.RequestDAO;
@@ -51,7 +50,7 @@ public class TestServiceImpl implements TestService {
                 bookDao.setRequestDao(requestDAO);
             }
             RequestDAO outDao = requestRepository.save(requestDAO);
-            outDao.setBookDaoList(bookRepository.findAll(Sort.by("id").descending()));
+            outDao.setBookDaoList(bookRepository.findByRequestDaoOrderByIdDesc(outDao));
             return RequestMapper.REQUEST_MAPPER.requestDAOToRequest(outDao);
         }
         throw new NoSuchRequest();
